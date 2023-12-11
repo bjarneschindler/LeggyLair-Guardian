@@ -1,70 +1,30 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { createSupabaseMiddlewareClient } from "./lib/supabase-server-client";
 
 export async function middleware(request: NextRequest) {
-  console.log("test");
-
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   });
 
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return request.cookies.get(name)?.value;
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-          response.cookies.set({
-            name,
-            value,
-            ...options,
-          });
-        },
-        remove(name: string, options: CookieOptions) {
-          request.cookies.set({
-            name,
-            value: "",
-            ...options,
-          });
-          response = NextResponse.next({
-            request: {
-              headers: request.headers,
-            },
-          });
-          response.cookies.set({
-            name,
-            value: "",
-            ...options,
-          });
-        },
-      },
-    }
-  );
-
-  const { pathname, origin } = request.nextUrl;
+  const supabase = createSupabaseMiddlewareClient({ request, response });
   const { data } = await supabase.auth.getSession();
-  const isAuth = data?.session;
-  const isAuthPage = pathname.startsWith("/auth");
+  const { pathname, origin } = request.nextUrl;
+  const isAuth = data?.session ?? false;
+  const isAuthPage =
+    pathname.startsWith("/auth") || pathname.startsWith("/login");
 
-  if (isAuth && isAuthPage) {
-    response = NextResponse.redirect(`${origin}/`);
-  } else if (!isAuth && !isAuthPage) {
-    response = NextResponse.redirect(`${origin}/auth/login`);
+  if (isAuthPage) {
+    if (isAuth) {
+      return NextResponse.redirect(`${origin}/`);
+    }
+
+    return response;
+  }
+
+  if (!isAuth) {
+    return NextResponse.redirect(`${origin}/login`);
   }
 
   return response;
