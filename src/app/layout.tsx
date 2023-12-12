@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="de" suppressHydrationWarning={true}>
       <head />
 
-      <body className={cn("min-h-screen bg-background", inter.className)}>
+      <body className={cn("min-h-screen bg-background px-5", inter.className)}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

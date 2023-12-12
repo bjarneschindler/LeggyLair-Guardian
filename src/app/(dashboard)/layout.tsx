@@ -1,7 +1,5 @@
 import { Separator } from "@/components/ui/separator";
 import { createSupabaseServerClient } from "@/lib/supabase-server-client";
-import UserDropdown from "./_components/user-dropdown";
-import Logo from "./_components/logo";
 
 export default async function DashboardLayout({
   children,
@@ -18,14 +16,6 @@ export default async function DashboardLayout({
 
   return (
     <div className="max-w-screen-xl mx-auto">
-      <header className="flex justify-between py-2 items-center">
-        <Logo />
-        <UserDropdown
-          name={user?.user_metadata.name}
-          avatarUrl={user?.user_metadata.avatar_url}
-          initials={initials}
-        />
-      </header>
       <Separator />
       <main className="flex flex-col py-5">{children}</main>
     </div>
