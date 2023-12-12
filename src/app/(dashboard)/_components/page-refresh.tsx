@@ -9,7 +9,7 @@ export default function PageRefresh() {
   useEffect(() => {
     const intervalId = setInterval(() => {
       router.refresh();
-    }, 1000 * 5);
+    }, 1000);
     return () => clearInterval(intervalId);
   });
 
