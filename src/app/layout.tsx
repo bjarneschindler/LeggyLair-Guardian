@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de">
+    <html lang="de" suppressHydrationWarning={true}>
       <head />
 
       <body className={cn("min-h-screen bg-background", inter.className)}>
