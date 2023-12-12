@@ -95,7 +95,7 @@ export default async function Dashboard() {
             <CardHeader>
               <CardTitle>Total Sensor Data Points</CardTitle>
             </CardHeader>
-            <CardContent className="text-4xl font-semibold">
+            <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-500">
               {totalSensorDataSets}
             </CardContent>
           </Card>
@@ -103,32 +103,31 @@ export default async function Dashboard() {
             <CardHeader>
               <CardTitle>Average Temperature</CardTitle>
             </CardHeader>
-            <CardContent className="text-4xl font-semibold">
+            <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-500">
               {avgTemperature.toFixed(2)} °C
             </CardContent>{" "}
           </Card>
           <Card className="md:p-0">
             <CardHeader>
+              <CardTitle>Temperature Peak</CardTitle>
+            </CardHeader>
+            <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-500">
+              {maxTemperature?.[0]?.temperature?.toFixed(2)} °C
+            </CardContent>
+          </Card>
+          <Card className="md:p-0">
+            <CardHeader>
               <CardTitle>Average Humidity</CardTitle>
             </CardHeader>
-            <CardContent className="text-4xl font-semibold">
+            <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
               {avgHumidity.toFixed(2)}%
             </CardContent>
           </Card>
           <Card className="md:p-0">
             <CardHeader>
-              <CardTitle>Temperature Peak</CardTitle>
-            </CardHeader>
-            <CardContent className="text-4xl font-semibold text-red-600">
-              {maxTemperature?.[0]?.temperature?.toFixed(2)} °C
-            </CardContent>
-          </Card>
-
-          <Card className="md:p-0">
-            <CardHeader>
               <CardTitle>Humidity Peak</CardTitle>
             </CardHeader>
-            <CardContent className="text-4xl font-semibold text-blue-500">
+            <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
               {maxHumidity?.[0]?.humidity?.toFixed(2)} %
             </CardContent>
           </Card>

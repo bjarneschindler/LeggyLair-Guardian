@@ -16,7 +16,6 @@ export default async function DashboardLayout({
 
   return (
     <div className="max-w-screen-xl mx-auto">
-      <Separator />
       <main className="flex flex-col py-5">{children}</main>
     </div>
   );
