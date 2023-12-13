@@ -60,6 +60,7 @@ export interface Database {
           peak_temperature: number
           avg_humidity: number
           peak_humidity: number
+          latest_timestamp: string
         }[]
       }
     }
