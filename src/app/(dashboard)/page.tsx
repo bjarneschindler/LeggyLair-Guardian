@@ -28,18 +28,6 @@ export default async function Dashboard() {
     .from("sensor_data")
     .select("id", { count: "exact" });
 
-  const { data: maxTemperature } = await supabase
-    .from("sensor_data")
-    .select("temperature")
-    .limit(1)
-    .order("temperature", { ascending: false });
-
-  const { data: maxHumidity } = await supabase
-    .from("sensor_data")
-    .select("humidity")
-    .limit(1)
-    .order("humidity", { ascending: false });
-
   if (!sensorData) sensorData = [];
 
   const labels = sensorData.map(({ created_at }) =>
@@ -70,13 +58,10 @@ export default async function Dashboard() {
     ],
   };
 
-  const avgHumidity =
-    sensorData.reduce((acc, { humidity }) => acc + (humidity ?? 0), 0) /
-    sensorData.length;
-
-  const avgTemperature =
-    sensorData.reduce((acc, { temperature }) => acc + (temperature ?? 0), 0) /
-    sensorData.length;
+  let { data: stats } = await supabase
+    .rpc("get_sensor_data_stats")
+    .select("avg_temperature, avg_humidity, peak_temperature, peak_humidity")
+    .single();
 
   return (
     <div className="flex flex-col gap-5 justify-stretch">
@@ -91,44 +76,61 @@ export default async function Dashboard() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-5 md:gap-5">
         <div className="flex flex-col gap-5 items-stretch justify-stretch">
-          <Card className="md:p-0">
-            <CardHeader>
-              <CardTitle>Total Sensor Data Points</CardTitle>
-            </CardHeader>
-            <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-500">
-              {totalSensorDataSets}
-            </CardContent>
-          </Card>
+          <div className="flex gap-5">
+            <Card className="md:p-0 w-full">
+              <CardHeader>
+                <CardTitle>Sensor Data Points</CardTitle>
+                <CardDescription>All Time</CardDescription>
+              </CardHeader>
+              <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-500">
+                {totalSensorDataSets}
+              </CardContent>
+            </Card>
+            <Card className="md:p-0 w-full">
+              <CardHeader>
+                <CardTitle>Sensor Data Points</CardTitle>
+                <CardDescription>Last 24 hours</CardDescription>
+              </CardHeader>
+              <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-slate-400 to-slate-500">
+                {totalSensorDataSets}
+              </CardContent>
+            </Card>
+          </div>
+
           <Card className="md:p-0">
             <CardHeader>
               <CardTitle>Average Temperature</CardTitle>
+              <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-500">
-              {avgTemperature.toFixed(2)} °C
+              {stats?.avg_temperature.toFixed(2)} °C
             </CardContent>{" "}
           </Card>
           <Card className="md:p-0">
             <CardHeader>
               <CardTitle>Temperature Peak</CardTitle>
+              <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-500">
-              {maxTemperature?.[0]?.temperature?.toFixed(2)} °C
+              {stats?.peak_temperature.toFixed(2)} °C
             </CardContent>
           </Card>
           <Card className="md:p-0">
             <CardHeader>
               <CardTitle>Average Humidity</CardTitle>
+              <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-              {avgHumidity.toFixed(2)}%
+              {stats?.avg_humidity.toFixed(2)} %
             </CardContent>
           </Card>
           <Card className="md:p-0">
             <CardHeader>
               <CardTitle>Humidity Peak</CardTitle>
+              <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-4xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-              {maxHumidity?.[0]?.humidity?.toFixed(2)} %
+              {stats?.peak_humidity.toFixed(2)} %
             </CardContent>
           </Card>
         </div>
