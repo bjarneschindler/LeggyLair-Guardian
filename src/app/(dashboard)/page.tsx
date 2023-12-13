@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/card";
 import Image from "next/image";
 import PageRefresh from "./_components/page-refresh";
-import { stat } from "fs";
 
 export default async function Dashboard() {
   const supabase = createSupabaseServerClient();
@@ -71,7 +70,7 @@ export default async function Dashboard() {
   return (
     <div className="flex flex-col gap-5 justify-stretch">
       <PageRefresh />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 justify-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 justify-stretch">
         <Card className="p-5 flex-1">
           <Chart data={humidity} />
         </Card>
@@ -79,9 +78,9 @@ export default async function Dashboard() {
           <Chart data={temperature} />
         </Card>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-y-5 md:gap-5">
-        <div className="grid grid-cols-2 gap-5">
-          <Card className="md:p-0 w-full col-span-2">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-y-5 xl:gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <Card className="md:p-0 w-full col-span-1 sm:col-span-2">
             <CardHeader>
               <CardTitle>Last Update</CardTitle>
             </CardHeader>
@@ -144,7 +143,7 @@ export default async function Dashboard() {
             </CardContent>
           </Card>
         </div>
-        <Card className="w-fit flex flex-col relative col-span-2">
+        <Card className="w-fit flex flex-col relative col-span-3 xl:col-span-2">
           <CardHeader>
             <CardTitle>Image Feed</CardTitle>
             <CardDescription>
@@ -155,11 +154,11 @@ export default async function Dashboard() {
           <CardContent>
             {imageData?.data ? (
               <Image
-                width={960}
+                width={1280}
                 height={720}
                 className="rounded-xl"
                 alt="The thing to be seen"
-                src={`data:image/png;base64,${imageData?.data}`}
+                src={`data:image/png;base64,${imageData.data}`}
               />
             ) : (
               <span className="flex justify-center p-20 text-3xl text-gray-100/10">
