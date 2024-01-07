@@ -73,7 +73,7 @@ export default async function Dashboard() {
       <PageRefresh />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 justify-stretch">
         <Card className="p-5 flex-1">
-          <HumidityChart initialData={sensorData} />
+          <HumidityChart initialData={sensorData as any} />
         </Card>
         <Card className="p-5 flex-1">
           <Chart data={temperature} />
@@ -113,7 +113,9 @@ export default async function Dashboard() {
               <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
-              {stats?.avg_temperature?.toFixed(2)} °C
+              {stats?.avg_temperature
+                ? stats?.avg_temperature?.toFixed(2) + " %"
+                : "N/A"}
             </CardContent>{" "}
           </Card>
           <Card className="md:p-0">
@@ -122,7 +124,9 @@ export default async function Dashboard() {
               <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
-              {stats?.peak_temperature?.toFixed(2)} °C
+              {stats?.peak_temperature
+                ? stats?.peak_temperature?.toFixed(2) + " %"
+                : "N/A"}{" "}
             </CardContent>
           </Card>
           <Card className="md:p-0">
@@ -131,7 +135,9 @@ export default async function Dashboard() {
               <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
-              {stats?.avg_humidity?.toFixed(2)} %
+              {stats?.avg_humidity
+                ? stats?.avg_humidity?.toFixed(2) + " %"
+                : "N/A"}{" "}
             </CardContent>
           </Card>
           <Card className="md:p-0">
@@ -140,7 +146,9 @@ export default async function Dashboard() {
               <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
-              {stats?.peak_humidity?.toFixed(2)} %
+              {stats?.peak_humidity
+                ? stats.peak_humidity.toFixed(2) + " %"
+                : "N/A"}
             </CardContent>
           </Card>
         </div>
