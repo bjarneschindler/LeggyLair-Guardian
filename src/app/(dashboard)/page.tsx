@@ -7,8 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
 import PageRefresh from "./_components/page-refresh";
+import ImageCard from "./_components/image-card";
+import HumidityChart from "./_components/charts/humidity-chart";
 
 export default async function Dashboard() {
   const supabase = createSupabaseServerClient();
@@ -72,7 +73,7 @@ export default async function Dashboard() {
       <PageRefresh />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 justify-stretch">
         <Card className="p-5 flex-1">
-          <Chart data={humidity} />
+          <HumidityChart initialData={sensorData} />
         </Card>
         <Card className="p-5 flex-1">
           <Chart data={temperature} />
@@ -112,7 +113,7 @@ export default async function Dashboard() {
               <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
-              {stats?.avg_temperature.toFixed(2)} °C
+              {stats?.avg_temperature?.toFixed(2)} °C
             </CardContent>{" "}
           </Card>
           <Card className="md:p-0">
@@ -121,7 +122,7 @@ export default async function Dashboard() {
               <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-orange-500">
-              {stats?.peak_temperature.toFixed(2)} °C
+              {stats?.peak_temperature?.toFixed(2)} °C
             </CardContent>
           </Card>
           <Card className="md:p-0">
@@ -130,7 +131,7 @@ export default async function Dashboard() {
               <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
-              {stats?.avg_humidity.toFixed(2)} %
+              {stats?.avg_humidity?.toFixed(2)} %
             </CardContent>
           </Card>
           <Card className="md:p-0">
@@ -139,34 +140,11 @@ export default async function Dashboard() {
               <CardDescription>In the last 24 hours</CardDescription>
             </CardHeader>
             <CardContent className="text-3xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-500">
-              {stats?.peak_humidity.toFixed(2)} %
+              {stats?.peak_humidity?.toFixed(2)} %
             </CardContent>
           </Card>
         </div>
-        <Card className="w-fit flex flex-col relative col-span-3 xl:col-span-2">
-          <CardHeader>
-            <CardTitle>Image Feed</CardTitle>
-            <CardDescription>
-              Last image captured:{" "}
-              {imageData && new Date(imageData.created_at).toLocaleString()}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {imageData?.data ? (
-              <Image
-                width={1280}
-                height={720}
-                className="rounded-xl"
-                alt="The thing to be seen"
-                src={`data:image/png;base64,${imageData.data}`}
-              />
-            ) : (
-              <span className="flex justify-center p-20 text-3xl text-gray-100/10">
-                No Image Data Available
-              </span>
-            )}
-          </CardContent>
-        </Card>
+        {imageData && <ImageCard initialImageData={imageData} />}
       </div>
     </div>
   );
